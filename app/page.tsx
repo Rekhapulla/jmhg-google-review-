@@ -13,7 +13,6 @@ import { Footer } from "@/components/Footer";
 import { CategoryOption } from "@/lib/config";
 import { polishFeedback } from "@/lib/ai";
 import { trackEvent } from "@/lib/analytics";
-import { generateReviewFromCategories, isGeneratedReviewText } from "@/lib/reviewGenerator";
 
 type FlowStep = "input" | "preview" | "success";
 
@@ -26,7 +25,6 @@ export default function Home() {
   const [originalFeedback, setOriginalFeedback] = useState<string>("");
   const [finalFeedback, setFinalFeedback] = useState<string>("");
   const [polishedFeedback, setPolishedFeedback] = useState<string>("");
-  const [isUserEdited, setIsUserEdited] = useState<boolean>(false);
 
   // AI & Processing states
   const [isPolishing, setIsPolishing] = useState<boolean>(false);
@@ -44,39 +42,18 @@ export default function Home() {
   const handleRatingChange = (newRating: number) => {
     setRating(newRating);
     trackEvent("rating_selected", { rating: newRating });
-
-    if (!isUserEdited || !originalFeedback.trim() || isGeneratedReviewText(originalFeedback)) {
-      if (selectedCategories.length > 0) {
-        const generated = generateReviewFromCategories(selectedCategories, newRating);
-        setOriginalFeedback(generated);
-      }
-    }
   };
 
   const handleToggleCategory = (category: CategoryOption) => {
-    setSelectedCategories((prev) => {
-      const next = prev.includes(category)
+    setSelectedCategories((prev) =>
+      prev.includes(category)
         ? prev.filter((c) => c !== category)
-        : [...prev, category];
-
-      if (!isUserEdited || !originalFeedback.trim() || isGeneratedReviewText(originalFeedback)) {
-        const generated = generateReviewFromCategories(next, rating > 0 ? rating : 5);
-        setOriginalFeedback(generated);
-        setIsUserEdited(false);
-      }
-
-      return next;
-    });
+        : [...prev, category]
+    );
   };
 
   const handleFeedbackChange = (text: string) => {
     setOriginalFeedback(text);
-
-    if (!text.trim()) {
-      setIsUserEdited(false);
-    } else if (!isGeneratedReviewText(text)) {
-      setIsUserEdited(true);
-    }
 
     if (text.length > 0 && !feedbackTypingStartedRef.current) {
       feedbackTypingStartedRef.current = true;
