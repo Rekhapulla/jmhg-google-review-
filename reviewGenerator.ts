@@ -34,9 +34,17 @@ const CATEGORY_TEMPLATES: Record<
     standalone: "The overall medical care and attention provided was outstanding.",
     clause: "the overall medical care was outstanding",
   },
+  "Pharmacy": {
+    standalone: "The pharmacy service was prompt and the staff were very helpful with medications.",
+    clause: "the pharmacy service was fast and helpful",
+  },
+  "Billing": {
+    standalone: "The billing process was quick, clear, and hassle-free.",
+    clause: "the billing process was smooth and transparent",
+  },
   "Other": {
-    standalone: "I had a smooth and positive overall experience with the hospital services.",
-    clause: "the service provided was smooth and positive",
+    standalone: "",
+    clause: "",
   },
 };
 
@@ -51,9 +59,14 @@ export function generateReviewFromCategories(
     return "";
   }
 
+  // If "Other" is selected, do not automatically generate text
+  if (categories.includes("Other")) {
+    return "";
+  }
+
   // Deduplicate and retain order
   const selected = Array.from(new Set(categories)).filter(
-    (cat) => CATEGORY_TEMPLATES[cat]
+    (cat) => cat !== "Other" && CATEGORY_TEMPLATES[cat]
   );
 
   if (selected.length === 0) {

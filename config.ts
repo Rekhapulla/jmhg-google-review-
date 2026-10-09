@@ -8,9 +8,8 @@
 export const HOSPITAL_NAME = "Jyothsna Maternity & General Hospital";
 export const HOSPITAL_SHORT_NAME = "JMHG";
 
-// Default placeholder as requested. Replace this or configure NEXT_PUBLIC_GOOGLE_REVIEW_URL
 export const GOOGLE_REVIEW_URL =
-  process.env.NEXT_PUBLIC_GOOGLE_REVIEW_URL || "PASTE_GOOGLE_REVIEW_URL_HERE";
+  process.env.NEXT_PUBLIC_GOOGLE_REVIEW_URL || "https://g.page/r/CYpR2wMYi4b4EBE/review";
 
 export const HOSPITAL_TAGLINE =
   "Excellence in maternity, women's health, and comprehensive general healthcare.";
@@ -24,6 +23,8 @@ export const CATEGORY_OPTIONS = [
   "Cleanliness",
   "Waiting experience",
   "Overall care",
+  "Pharmacy",
+  "Billing",
   "Other",
 ] as const;
 
